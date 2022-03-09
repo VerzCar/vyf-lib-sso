@@ -12,6 +12,7 @@ type Service interface {
 	CreateUser(ctx context.Context, email string, password string) (string, error)
 	DeleteUser(ctx context.Context, userId string) error
 	SendVerificationEmail(ctx context.Context, userId string) error
+	Login(ctx context.Context, username string, password string) (*SsoJWT, error)
 }
 
 type service struct {
@@ -155,6 +156,27 @@ func (s *service) SendVerificationEmail(ctx context.Context, userId string) erro
 	}
 
 	return nil
+}
+
+func (s *service) Login(ctx context.Context, username string, password string) (*SsoJWT, error) {
+	realm := s.config.Sso.Realm.Default
+
+	goJwt, err := s.sso.Login(
+		ctx,
+		s.config.Sso.Client.Id,
+		s.config.Sso.Client.Secret,
+		realm,
+		username,
+		password,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ssoJwt := &SsoJWT{*goJwt}
+
+	return ssoJwt, nil
 }
 
 // accessToken gets the access token for the admin login.
