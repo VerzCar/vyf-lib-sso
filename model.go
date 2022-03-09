@@ -1,6 +1,9 @@
 package sso
 
-import "github.com/golang-jwt/jwt/v4"
+import (
+	"github.com/Nerzal/gocloak/v10"
+	"github.com/golang-jwt/jwt/v4"
+)
 
 type SsoClaims struct {
 	Name              string `json:"name,omitempty"`
@@ -13,4 +16,8 @@ type SsoClaims struct {
 	EmailVerified     bool   `json:"email_verified,omitempty"`
 	UpdatedAt         int    `json:"updated_at,omitempty"`
 	jwt.RegisteredClaims
+}
+
+type SsoJWT struct {
+	gocloak.JWT
 }
