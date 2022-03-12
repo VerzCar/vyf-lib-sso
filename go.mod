@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/Nerzal/gocloak/v10 v10.0.1
 	github.com/golang-jwt/jwt/v4 v4.2.0
-	github.com/mitchellh/mapstructure v1.4.3
 )
 
 require (

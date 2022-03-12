@@ -5,7 +5,23 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-type SsoClaims struct {
+type identityProvider struct {
+	realm        string
+	clientID     string
+	clientSecret string
+}
+
+type realmAdmin struct {
+	username string
+	password string
+}
+
+type Request struct {
+	identityProvider
+	admin realmAdmin
+}
+
+type Claims struct {
 	Name              string `json:"name,omitempty"`
 	GivenName         string `json:"given_name,omitempty"`
 	FamilyName        string `json:"family_name,omitempty"`
@@ -18,6 +34,10 @@ type SsoClaims struct {
 	jwt.RegisteredClaims
 }
 
-type SsoJWT struct {
+type UserInfo struct {
+	gocloak.UserInfo
+}
+
+type JWT struct {
 	gocloak.JWT
 }
