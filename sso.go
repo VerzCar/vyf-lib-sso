@@ -12,6 +12,12 @@ type Service interface {
 	CreateUser(ctx context.Context, email string, password string, options ...Option) (string, error)
 	DeleteUser(ctx context.Context, userId string, options ...Option) error
 	UserInfo(ctx context.Context, accessToken string, options ...Option) (*UserInfo, error)
+	User(
+		ctx context.Context,
+		accessToken string,
+		userID string,
+		options ...Option,
+	) (*User, error)
 	SendVerificationEmail(ctx context.Context, userId string, redirectUri string, options ...Option) error
 	Login(ctx context.Context, username string, password string, options ...Option) (*JWT, error)
 	Logout(ctx context.Context, refreshToken string, options ...Option) error
@@ -164,6 +170,31 @@ func (s *service) UserInfo(
 
 	return userInfo, nil
 
+}
+
+// User gets the user by id.
+func (s *service) User(
+	ctx context.Context,
+	accessToken string,
+	userID string,
+	options ...Option,
+) (*User, error) {
+	req := s.applyOptions(options)
+
+	goUser, err := s.sso.GetUserByID(
+		ctx,
+		accessToken,
+		req.realm,
+		userID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user := &User{*goUser}
+
+	return user, nil
 }
 
 // SendVerificationEmail send the verification email of the given user id.

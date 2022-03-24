@@ -38,6 +38,10 @@ type UserInfo struct {
 	gocloak.UserInfo
 }
 
+type User struct {
+	gocloak.User
+}
+
 type JWT struct {
 	gocloak.JWT
 }
